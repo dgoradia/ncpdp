@@ -44,10 +44,16 @@ type Terminology struct {
 	NCItDefinition      string
 }
 
-func LoadTerminology() (*Terminologies, error) {
-	file, err := os.Open(baseModulePath() + "/NCPDPTerminology.txt")
-	if err != nil {
-		return nil, err
+func LoadTerminology(f ...*os.File) (*Terminologies, error) {
+	var file *os.File
+	var err error
+	if len(f) > 0 {
+		file = f[0]
+	} else {
+		file, err = os.Open(baseModulePath() + "/NCPDPTerminology.txt")
+		if err != nil {
+			return nil, err
+		}
 	}
 	defer file.Close()
 
@@ -140,10 +146,16 @@ type Loinc struct {
 	DisplayName               string `csv:"DisplayName"`
 }
 
-func LoadLoinc() (LoincData, error) {
-	file, err := os.Open(baseModulePath() + "/Loinc.csv")
-	if err != nil {
-		return nil, err
+func LoadLoinc(f ...*os.File) (LoincData, error) {
+	var file *os.File
+	var err error
+	if len(f) > 0 {
+		file = f[0]
+	} else {
+		file, err = os.Open(baseModulePath() + "/Loinc.csv")
+		if err != nil {
+			return nil, err
+		}
 	}
 	defer file.Close()
 
