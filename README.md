@@ -1,8 +1,36 @@
+[![codecov](https://codecov.io/gh/dgoradia/ncpdp/branch/main/graph/badge.svg?token=ZNKIEQNZ55)](https://codecov.io/gh/dgoradia/ncpdp)
+
 # NCPDP Script 2017071
 
-#### From base64 encoded string
-```go
-script := `PE1lc3NhZ2UgRGF0YXR5cGVzVmVyc2lvbj0iMjAxNzA3MTUiIFRyYW5zcG9ydFZlcnNpb249IjIwMTcwNzE1IiBUcmFuc2FjdGlvbkRvbWFpbj0iU0NSSVBUIiBUcmFuc2FjdGlvblZlcnNpb249IjIwMTcwNzE1IiBTdHJ1Y3R1cmVzVmVyc2lvbj0iMjAxNzA3MTUiIEVDTFZlcnNpb249IjIwMTcwNzE1Ij48L01lc3NhZ2U+`
+## Usage
+See tests for more usage examples.
 
-message, err := ncpdp.NewMessage(script)
+The decoder accepts an `io.Reader` and can decode xml to a `*Message` or `json`.
+
+Decode NewRx (xml) file:
+```go
+file, err := os.Open("testdata/sample-newrx.xml")
+if err != nil {
+    log.Fatal(err)
+}
+defer file.Close()
+
+script := ncpdp.NewDecoder(file)
+message, err := script.Decode()
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("%+v\n", message.Body.NewRx)
+```
+
+Get JSON representation:
+```go
+
+message, err := script.ToJson()
+if err != nil {
+    log.Fatal(err)
+}
+
+fmt.Printf("%+v\n", string(message))
 ```

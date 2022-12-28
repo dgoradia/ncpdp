@@ -1,0 +1,139 @@
+<Message DatatypesVersion="20170715" TransportVersion="20170715" TransactionDomain="SCRIPT" TransactionVersion="20170715" StructuresVersion="20170715" ECLVersion="20170715">
+    <Header>
+        <To Qualifier="P">6557744</To>
+        <From Qualifier="D">6128890368017</From>
+        <MessageID>app-515537252384789</MessageID>
+        <SentTime>2022-09-24T19:27:22Z</SentTime>
+        <Security>
+            <Sender>
+                <TertiaryIdentification>1105</TertiaryIdentification>
+            </Sender>
+            <Receiver>
+                <TertiaryIdentification>142</TertiaryIdentification>
+            </Receiver>
+        </Security>
+        <SenderSoftware>
+            <SenderSoftwareDeveloper>Elation Health</SenderSoftwareDeveloper>
+            <SenderSoftwareProduct>ElationEMR</SenderSoftwareProduct>
+            <SenderSoftwareVersionRelease>3.0</SenderSoftwareVersionRelease>
+        </SenderSoftware>
+        <Mailbox>
+            <DeliveredID>b4cb9f7038d849339060b7ccf1c1104d</DeliveredID>
+        </Mailbox>
+        <PrescriberOrderNumber>515537246945306</PrescriberOrderNumber>
+    </Header>
+    <Body>
+        <NewRx>
+            <Patient>
+                <HumanPatient>
+                    <Name>
+                        <LastName>Jenny</LastName>
+                        <FirstName>Craigling</FirstName>
+                    </Name>
+                    <Gender>F</Gender>
+                    <DateOfBirth>
+                        <Date>1984-09-09</Date>
+                    </DateOfBirth>
+                    <Address>
+                        <AddressLine1>2015 Favorite Ave</AddressLine1>
+                        <AddressLine2>Apt 999</AddressLine2>
+                        <City>Miami</City>
+                        <StateProvince>FL</StateProvince>
+                        <PostalCode>33333</PostalCode>
+                        <CountryCode>US</CountryCode>
+                    </Address>
+                    <CommunicationNumbers>
+                        <PrimaryTelephone>
+                            <Number>3738235389</Number>
+                        </PrimaryTelephone>
+                    </CommunicationNumbers>
+                </HumanPatient>
+            </Patient>
+            <Pharmacy>
+                <Identification>
+                    <NCPDPID>6557744</NCPDPID>
+                    <NPI>1142138869</NPI>
+                </Identification>
+                <BusinessName>A+ Drugs</BusinessName>
+                <Address>
+                    <AddressLine1>233 Hydroflask Avenue</AddressLine1>
+                    <City>My City</City>
+                    <StateProvince>CA</StateProvince>
+                    <PostalCode>97823</PostalCode>
+                </Address>
+                <CommunicationNumbers>
+                    <PrimaryTelephone>
+                        <Number>3429521979</Number>
+                    </PrimaryTelephone>
+                </CommunicationNumbers>
+            </Pharmacy>
+            <Prescriber>
+                <NonVeterinarian>
+                    <Identification>
+                        <DEANumber>BB8027505</DEANumber>
+                        <NPI>1939842031</NPI>
+                    </Identification>
+                    <PracticeLocation>
+                        <BusinessName>Hey Friend</BusinessName>
+                    </PracticeLocation>
+                    <Name>
+                        <LastName>Bless</LastName>
+                        <FirstName>Janine</FirstName>
+                        <Suffix>MD</Suffix>
+                    </Name>
+                    <Address>
+                        <AddressLine1>3100 Broadway</AddressLine1>
+                        <AddressLine2>Ste 666</AddressLine2>
+                        <City>New York</City>
+                        <StateProvince>NY</StateProvince>
+                        <PostalCode>10025</PostalCode>
+                        <CountryCode>US</CountryCode>
+                    </Address>
+                    <CommunicationNumbers>
+                        <PrimaryTelephone>
+                            <Number>4593423649</Number>
+                        </PrimaryTelephone>
+                        <Fax>
+                            <Number>4593423650</Number>
+                        </Fax>
+                    </CommunicationNumbers>
+                </NonVeterinarian>
+            </Prescriber>
+            <MedicationPrescribed>
+                <DrugDescription>Ondansetron 8 mg Tab Disintegrating</DrugDescription>
+                <DrugCoded>
+                    <ProductCode>
+                        <Code>62135012230</Code>
+                        <Qualifier>ND</Qualifier>
+                    </ProductCode>
+                    <DrugDBCode>
+                        <Code>312087</Code>
+                        <Qualifier>SCD</Qualifier>
+                    </DrugDBCode>
+                </DrugCoded>
+                <Quantity>
+                    <Value>15</Value>
+                    <CodeListQualifier>38</CodeListQualifier>
+                    <QuantityUnitOfMeasure>
+                        <Code>C48542</Code>
+                    </QuantityUnitOfMeasure>
+                </Quantity>
+                <WrittenDate>
+                    <Date>2022-09-24</Date>
+                </WrittenDate>
+                <Substitutions>0</Substitutions>
+                <NumberOfRefills>0</NumberOfRefills>
+                <Sig>
+                    <SigText>1 tablet orally every 8 hours as needed for nausea, let dissolve then swallow with saliva</SigText>
+                </Sig>
+                <RxFillIndicator>All Fill Statuses</RxFillIndicator>
+                <OtherMedicationDate>
+                    <OtherMedicationDate>
+                        <Date>2022-09-24</Date>
+                    </OtherMedicationDate>
+                    <OtherMedicationDateQualifier>EffectiveDate</OtherMedicationDateQualifier>
+                </OtherMedicationDate>
+            </MedicationPrescribed>
+        </NewRx>
+    </Body>
+</Message>

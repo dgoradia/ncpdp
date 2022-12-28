@@ -1,38 +1,59 @@
 package ncpdp
 
 import (
-	"encoding/base64"
+	"bytes"
+	_ "embed"
 	"encoding/csv"
 	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
-	"os"
-	"path/filepath"
-	"runtime"
 
 	"github.com/gocarina/gocsv"
 )
 
-func NewMessage(message string) (*Message, error) {
-	dec, err := base64.StdEncoding.DecodeString(message)
+var (
+	//go:embed NCPDPTerminology.txt
+	NCPDPTerminologyDataFile []byte
+
+	//go:embed Loinc.csv
+	LoincDataFile []byte
+)
+
+type Decoder struct {
+	msg *Message
+	r   io.Reader
+	buf []byte
+}
+
+func NewDecoder(r io.Reader) *Decoder {
+	return &Decoder{r: r}
+}
+
+func (d *Decoder) Decode() (*Message, error) {
+	return d.msg, d.decode()
+}
+
+func (d *Decoder) decode() error {
+	if d.buf == nil && d.r != nil {
+		buf := new(bytes.Buffer)
+		buf.ReadFrom(d.r)
+		d.buf = buf.Bytes()
+	}
+
+	return xml.Unmarshal(d.buf, &d.msg)
+}
+
+func (d *Decoder) ToJson() ([]byte, error) {
+	err := d.decode()
 	if err != nil {
 		return nil, err
 	}
 
-	var msg Message
-	return &msg, xml.Unmarshal(dec, &msg)
+	return json.Marshal(d.msg)
 }
 
-func (m *Message) ToJson() ([]byte, error) {
-	return json.Marshal(m)
-}
-
-func baseModulePath() string {
-	_, b, _, _ := runtime.Caller(0)
-	return filepath.Dir(b)
-}
-
-type Terminologies []Terminology
+type Terminologies []*Terminology
 
 type Terminology struct {
 	NCItSubsetCode      string
@@ -44,49 +65,41 @@ type Terminology struct {
 	NCItDefinition      string
 }
 
-func LoadTerminology(f ...*os.File) (*Terminologies, error) {
-	var file *os.File
-	var err error
-	if len(f) > 0 {
-		file = f[0]
-	} else {
-		file, err = os.Open(baseModulePath() + "/NCPDPTerminology.txt")
-		if err != nil {
-			return nil, err
-		}
+func LoadTerminology(r io.Reader) (*Terminologies, error) {
+	if r == nil {
+		r = bytes.NewReader(NCPDPTerminologyDataFile)
 	}
-	defer file.Close()
+
+	gocsv.SetCSVReader(func(in io.Reader) gocsv.CSVReader {
+		r := csv.NewReader(in)
+		r.Comma = '\t'
+		r.FieldsPerRecord = 7
+
+		return r
+	})
 
 	var data Terminologies
-	reader := csv.NewReader(file)
-	reader.Comma = '\t'
-	reader.FieldsPerRecord = 7
-
-	// Skip the first row
-	if _, err := reader.Read(); err != nil {
+	if err := gocsv.UnmarshalWithoutHeaders(r, &data); err != nil {
 		return nil, err
-	}
-
-	for {
-		rec, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-		if err != nil {
-			return nil, err
-		}
-
-		term := Terminology{
-			rec[0], rec[1], rec[2], rec[3], rec[4], rec[5], rec[6],
-		}
-
-		data = append(data, term)
 	}
 
 	return &data, nil
 }
 
+func (t *Terminologies) Len() int {
+	if t == nil {
+		return 0
+	}
+
+	return len(*t)
+}
+
 func (t Terminologies) FindTermByQuantityUnitOfMeasureCode(s string) string {
+	if len(t) == 0 {
+		fmt.Println("no terminology data loaded")
+		return ""
+	}
+
 	for i := range t {
 		if t[i].NCItCode == s {
 			return t[i].PreferredTerm
@@ -146,23 +159,27 @@ type Loinc struct {
 	DisplayName               string `csv:"DisplayName"`
 }
 
-func LoadLoinc(f ...*os.File) (LoincData, error) {
-	var file *os.File
-	var err error
-	if len(f) > 0 {
-		file = f[0]
-	} else {
-		file, err = os.Open(baseModulePath() + "/Loinc.csv")
-		if err != nil {
-			return nil, err
-		}
+func LoadLoinc(r io.Reader) (*LoincData, error) {
+	if r == nil {
+		r = bytes.NewReader(LoincDataFile)
 	}
-	defer file.Close()
 
-	var data []*Loinc
-	if err := gocsv.UnmarshalFile(file, &data); err != nil {
+	gocsv.SetCSVReader(func(in io.Reader) gocsv.CSVReader {
+		return gocsv.LazyCSVReader(in)
+	})
+
+	var data LoincData
+	if err := gocsv.Unmarshal(r, &data); err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	return &data, nil
+}
+
+func (l *LoincData) Len() int {
+	if l == nil {
+		return 0
+	}
+
+	return len(*l)
 }
