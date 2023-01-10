@@ -1,0 +1,33 @@
+name: Go
+
+on: [push]
+
+jobs:
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        go-version: [1.18, 1.19]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v3
+        with:
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@master
+      - uses: actions/cache@v2
+        with:
+          path: |
+            ~/go/pkg/mod
+            ~/.cache/go-build
+          key: go-${{ matrix.go-version }}-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-${{ matrix.go-version }}-
+      - name: test
+        run: go test -v -cover -coverprofile=coverage.txt -covermode=atomic ./...
+      - name: report-coverage
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./coverage.txt
+          flags: unittests
+          name: codecov-umbrella
