@@ -384,7 +384,7 @@ type DEASchedule struct {
 }
 
 type Quantity struct {
-	Value                 int64         `xml:"Value" json:"value,omitempty"`
+	Value                 float64       `xml:"Value" json:"value,omitempty"`
 	CodeListQualifier     string        `xml:"CodeListQualifier" json:"code_list_qualifier,omitempty"`
 	QuantityUnitOfMeasure UnitOfMeasure `xml:"QuantityUnitOfMeasure" json:"quantity_unit_of_measure,omitempty"`
 }

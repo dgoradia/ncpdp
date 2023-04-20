@@ -17,6 +17,12 @@ func TestNewDecoder(t *testing.T) {
 	}
 	defer file.Close()
 
+	fileQtyFloat, err := os.Open("testdata/sample-newrx-qty-float.xml")
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer fileQtyFloat.Close()
+
 	tests := []struct {
 		name    string
 		msg     io.Reader
@@ -50,6 +56,12 @@ func TestNewDecoder(t *testing.T) {
 			name:    "date decode error",
 			msg:     strings.NewReader(`<Message><Body><NewRx><Patient><HumanPatient><DateOfBirth><Date><>20219-01-01</Date></DateOfBirth></HumanPatient></Patient></NewRx></Body></Message>`),
 			wantErr: true,
+		},
+		{
+			name:    "parse quantity float",
+			msg:     fileQtyFloat,
+			wantErr: false,
+			err:     nil,
 		},
 	}
 
